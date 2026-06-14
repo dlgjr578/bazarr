@@ -539,8 +539,10 @@ class SuperSubtitlesProvider(Provider, ProviderSubtitleArchiveMixin):
                         fixed_title = fix_tv_naming(item.series)
                     else:
                         fixed_title = fix_movie_naming(item.series)
+
                     # Check for the original and the fixed titles too
-                    if any(x in (fixed_title.strip(), item.series) for x in titles):
+                    normalized_titles = {x.lower() for x in titles}
+                    if fixed_title.strip().lower() in normalized_titles or (item.series or "").lower() in normalized_titles:
                         subtitles.append(item)
 
             time.sleep(self.multi_result_throttle)
